@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative QR Code Generator</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Advanced QR Code generation library -->
+    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .btn-transition { transition: all 0.2s ease-in-out; }
+        .btn-transition:active { transform: scale(0.97); }
+        .control-panel select, .control-panel input:not([type=color]):not([type=file]) {
+            background-color: #1F2937; /* gray-800 */
+            border: 1px solid #4B5563; /* gray-600 */
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            color: white;
+            width: 100%;
+        }
+        .control-panel select:focus, .control-panel input:focus {
+            outline: none;
+            border-color: #4f46e5; /* indigo-600 */
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+        }
+        .color-input-wrapper {
+            border: 1px solid #4B5563;
+            border-radius: 0.5rem;
+            padding: 4px;
+            background-color: #1F2937;
+        }
+        input[type="color"] {
+            -webkit-appearance: none;
+            width: 36px;
+            height: 36px;
+            border: none;
+            cursor: pointer;
+            border-radius: 0.375rem;
+            padding: 0;
+            overflow: hidden;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 0.375rem; }
+        
+        .tab-button {
+            background-color: #374151; /* gray-700 */
+            color: #D1D5DB; /* gray-300 */
+        }
+        .tab-button.active {
+            background-color: #4f46e5; /* indigo-600 */
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-5xl font-bold text-white tracking-tight">QR Generator.
+            <p class="text-gray-400 mt-3 text-lg">placeholder text.</p>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+
+            <!-- Left Panel: Controls -->
+            <div class="lg:col-span-2 bg-gray-800 rounded-xl shadow-2xl p-6 control-panel">
+                
+                <!-- Tabs -->
+                <div class="grid grid-cols-3 gap-2 rounded-lg bg-gray-700 p-1 mb-6">
+                    <button class="tab-button py-2 rounded-md font-semibold btn-transition active" data-tab="content">Content</button>
+                    <button class="tab-button py-2 rounded-md font-semibold btn-transition" data-tab="style">Style</button>
+                    <button class="tab-button py-2 rounded-md font-semibold btn-transition" data-tab="logo">Logo</button>
+                </div>
+
+                <!-- Tab Panels -->
+                <div id="tab-panels" class="space-y-6">
+                    <!-- Content Tab -->
+                    <div id="content-panel" class="space-y-4">
+                        <h3 class="text-xl font-semibold text-white">QR Code Data</h3>
+                        <div>
+                            <label for="qr-type" class="block text-sm font-medium text-gray-300 mb-2">Content Type</label>
+                            <select id="qr-type">
+                                <option value="text">URL / Text</option>
+                                <option value="wifi">WiFi Network</option>
+                                <option value="vcard">vCard Contact</option>
+                                <option value="email">Email</option>
+                            </select>
+                        </div>
+                        <!-- Content Type Inputs -->
+                        <div id="content-inputs" class="space-y-3 pt-2">
+                           <!-- JS will populate this -->
+                        </div>
+                    </div>
+
+                    <!-- Style Tab -->
+                    <div id="style-panel" class="space-y-6 hidden">
+                        <h3 class="text-xl font-semibold text-white">Appearance</h3>
+                        <!-- Shape -->
+                        <div class="space-y-4">
+                             <h4 class="text-md font-semibold text-gray-200">Shape & Style</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="dots-style" class="block text-sm font-medium text-gray-300 mb-2">Dots</label>
+                                    <select id="dots-style">
+                                        <option value="square">Square</option>
+                                        <option value="dots">Dots</option>
+                                        <option value="rounded">Rounded</option>
+                                        <option value="extra-rounded">Extra Rounded</option>
+                                        <option value="classy">Classy</option>
+                                        <option value="classy-rounded">Classy Rounded</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="corners-square-style" class="block text-sm font-medium text-gray-300 mb-2">Corner Squares</label>
+                                    <select id="corners-square-style">
+                                        <option value="square">Square</option>
+                                        <option value="dot">Dot</option>
+                                        <option value="extra-rounded">Extra Rounded</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="corners-dot-style" class="block text-sm font-medium text-gray-300 mb-2">Corner Dots</label>
+                                    <select id="corners-dot-style">
+                                        <option value="square">Square</option>
+                                        <option value="dot">Dot</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Colors -->
+                        <div class="space-y-4 pt-4 border-t border-gray-700">
+                             <h4 class="text-md font-semibold text-gray-200">Colors & Gradient</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Primary Color</label>
+                                     <div class="color-input-wrapper"><input type="color" id="color-1" value="#000000"></div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Background</label>
+                                     <div class="color-input-wrapper"><input type="color" id="bg-color" value="#FFFFFF"></div>
+                                </div>
+                            </div>
+                             <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Gradient (Optional)</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <select id="gradient-type">
+                                        <option value="none">None</option>
+                                        <option value="linear">Linear</option>
+                                        <option value="radial">Radial</option>
+                                    </select>
+                                    <div class="color-input-wrapper"><input type="color" id="color-2" value="#000000"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logo Tab -->
+                    <div id="logo-panel" class="space-y-4 hidden">
+                        <h3 class="text-xl font-semibold text-white">Embed Logo</h3>
+                        <div>
+                            <label for="logo-upload" class="block text-sm font-medium text-gray-300 mb-2">Upload Image</label>
+                            <input type="file" id="logo-upload" accept="image/png, image/jpeg, image/svg+xml" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+                        </div>
+                        <div>
+                            <label for="image-margin" class="block text-sm font-medium text-gray-300 mb-2">Logo Margin (padding)</label>
+                            <input type="number" id="image-margin" value="10" min="0" max="50">
+                        </div>
+                    </div>
+                </div>
+                 <!-- Error Message -->
+                <div id="error-message" class="text-red-400 text-center font-medium h-6 mt-4"></div>
+            </div>
+
+            <!-- Right Panel: QR Code Preview -->
+            <div class="lg:col-span-3 bg-gray-800 rounded-xl shadow-2xl p-6 flex flex-col items-center justify-center min-h-[500px]">
+                <div id="canvas-container" class="w-full max-w-md h-auto bg-white p-4 rounded-lg shadow-inner">
+                    <!-- QR Code canvas will be appended here -->
+                </div>
+                <div class="mt-8 w-full max-w-md">
+                     <p class="text-center text-gray-400 mb-3">Download As</p>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button id="download-png" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg btn-transition flex items-center justify-center space-x-2"><span>PNG</span></button>
+                        <button id="download-jpeg" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg btn-transition flex items-center justify-center space-x-2"><span>JPEG</span></button>
+                        <button id="download-svg" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg btn-transition flex items-center justify-center space-x-2"><span>SVG</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const controls = {
+            qrType: document.getElementById('qr-type'),
+            contentInputs: document.getElementById('content-inputs'),
+            dotsStyle: document.getElementById('dots-style'),
+            cornersSquareStyle: document.getElementById('corners-square-style'),
+            cornersDotStyle: document.getElementById('corners-dot-style'),
+            color1: document.getElementById('color-1'),
+            color2: document.getElementById('color-2'),
+            bgColor: document.getElementById('bg-color'),
+            gradientType: document.getElementById('gradient-type'),
+            logoUpload: document.getElementById('logo-upload'),
+            imageMargin: document.getElementById('image-margin'),
+            errorMessage: document.getElementById('error-message'),
+        };
+
+        const qrCode = new QRCodeStyling({
+            width: 350,
+            height: 350,
+            data: "https://google.com",
+            margin: 10,
+            type: 'svg',
+            dotsOptions: { color: '#000000', type: 'square' },
+            backgroundOptions: { color: '#ffffff' },
+            imageOptions: { crossOrigin: 'anonymous', margin: 10 },
+            cornersSquareOptions: { type: 'square' },
+            cornersDotOptions: { type: 'square' }
+        });
+        
+        qrCode.append(document.getElementById('canvas-container'));
+
+        // --- UI Logic (Tabs & Dynamic Inputs) ---
+        const tabs = document.querySelectorAll('.tab-button');
+        const panels = {
+            content: document.getElementById('content-panel'),
+            style: document.getElementById('style-panel'),
+            logo: document.getElementById('logo-panel'),
+        };
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                Object.values(panels).forEach(p => p.classList.add('hidden'));
+                panels[tab.dataset.tab].classList.remove('hidden');
+            });
+        });
+
+        const contentTemplates = {
+            text: `<input type="text" id="text-input" placeholder="https://example.com" class="text-lg">`,
+            wifi: `
+                <input type="text" id="wifi-ssid" placeholder="Network Name (SSID)">
+                <input type="text" id="wifi-pass" placeholder="Password">
+                <select id="wifi-encryption"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">None</option></select>
+            `,
+            vcard: `
+                <input type="text" id="vcard-name" placeholder="Full Name">
+                <input type="tel" id="vcard-phone" placeholder="Phone">
+                <input type="email" id="vcard-email" placeholder="Email">
+                <input type="text" id="vcard-org" placeholder="Organization">
+            `,
+            email: `
+                <input type="email" id="email-to" placeholder="To: email@example.com">
+                <input type="text" id="email-subject" placeholder="Subject">
+                <textarea id="email-body" placeholder="Message..." rows="3" class="w-full bg-gray-800 border border-gray-600 rounded-lg p-2"></textarea>
+            `
+        };
+        
+        const renderContentInputs = () => {
+            const type = controls.qrType.value;
+            controls.contentInputs.innerHTML = contentTemplates[type];
+            // Re-add event listeners to new inputs
+            document.querySelectorAll('#content-inputs input, #content-inputs select, #content-inputs textarea').forEach(el => {
+                el.addEventListener('input', updateQRCode);
+            });
+        };
+
+        // --- QR Code Logic ---
+        const getQRCodeData = () => {
+            const type = controls.qrType.value;
+            switch(type) {
+                case 'wifi':
+                    const ssid = document.getElementById('wifi-ssid').value;
+                    const pass = document.getElementById('wifi-pass').value;
+                    const enc = document.getElementById('wifi-encryption').value;
+                    return `WIFI:T:${enc};S:${ssid};P:${pass};;`;
+                case 'vcard':
+                    const name = document.getElementById('vcard-name').value;
+                    const phone = document.getElementById('vcard-phone').value;
+                    const email = document.getElementById('vcard-email').value;
+                    const org = document.getElementById('vcard-org').value;
+                    return `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nORG:${org}\nTEL:${phone}\nEMAIL:${email}\nEND:VCARD`;
+                case 'email':
+                    const to = document.getElementById('email-to').value;
+                    const subject = document.getElementById('email-subject').value;
+                    const body = document.getElementById('email-body').value;
+                    return `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                case 'text':
+                default:
+                    const text = document.getElementById('text-input').value;
+                    return text.trim() === '' ? 'https://gemini.google.com/' : text.trim();
+            }
+        };
+
+        const updateQRCode = () => {
+            try {
+                 const gradientOptions = controls.gradientType.value !== 'none' ? {
+                    type: controls.gradientType.value,
+                    colorStops: [{ offset: 0, color: controls.color1.value }, { offset: 1, color: controls.color2.value }]
+                } : null;
+
+                const newOptions = {
+                    data: getQRCodeData(),
+                    dotsOptions: {
+                        type: controls.dotsStyle.value,
+                        ...(gradientOptions ? { gradient: gradientOptions } : { color: controls.color1.value })
+                    },
+                    cornersSquareOptions: { type: controls.cornersSquareStyle.value },
+                    cornersDotOptions: { type: controls.cornersDotStyle.value },
+                    backgroundOptions: { color: controls.bgColor.value },
+                    imageOptions: { margin: parseInt(controls.imageMargin.value) || 0 }
+                };
+                
+                qrCode.update(newOptions);
+                controls.errorMessage.textContent = '';
+            } catch (error) {
+                console.error(error);
+                controls.errorMessage.textContent = "Data is too long for a QR Code.";
+            }
+        };
+
+        // --- Initial Setup & Event Listeners ---
+        controls.qrType.addEventListener('change', () => {
+            renderContentInputs();
+            updateQRCode();
+        });
+        
+        document.querySelectorAll('#style-panel select, #style-panel input').forEach(el => {
+            el.addEventListener('input', updateQRCode);
+        });
+        
+        document.querySelectorAll('#logo-panel input').forEach(el => {
+            if (el.id !== 'logo-upload') el.addEventListener('input', updateQRCode);
+        });
+
+        controls.logoUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = () => qrCode.update({ image: reader.result });
+                reader.readAsDataURL(file);
+            } else {
+                qrCode.update({ image: null });
+            }
+        });
+
+        document.getElementById('download-png').addEventListener('click', () => qrCode.download({ name: 'qrcode', extension: 'png' }));
+        document.getElementById('download-jpeg').addEventListener('click', () => qrCode.download({ name: 'qrcode', extension: 'jpeg' }));
+        document.getElementById('download-svg').addEventListener('click', () => qrCode.download({ name: 'qrcode', extension: 'svg' }));
+        
+        // Initial render
+        renderContentInputs();
+        updateQRCode();
+    </script>
+
+</body>
+</html>
+
