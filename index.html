@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>qrcodeeee</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+</head>
+<body>
+    <header>
+        <h1>qrcodeeee</h1>
+        <p class="hero-subtitle">qr code generation made easy!</p>
+    </header>
+
+    <main class="main-grid">
+        <section class="panel">  
+            <div class="tabs-header">
+                <button class="tab-button active" data-tab="content">Data</button>
+                <button class="tab-button" data-tab="style">Style</button>
+                <button class="tab-button" data-tab="logo">Logo</button>
+            </div>
+
+            <div id="tab-panels">
+                <div id="content-panel">
+                    <div class="control-group">
+                        <label>Type</label>
+                        <select id="qr-type">
+                            <option value="text">Plain Text</option>
+                            <option value="wifi">WiFi</option>
+                            <option value="vcard">vCard</option>
+                            <option value="email">Email</option>
+                        </select>
+                    </div>
+                    <div id="content-inputs"></div>
+                </div>
+
+                <div id="style-panel" class="hidden">
+                    <div class="grid-cols-2">
+                        <div class="control-group">
+                            <label>Dots</label>
+                            <select id="dots-style"><option value="square">Square</option><option value="dots">Dots</option><option value="rounded">Rounded</option></select>
+                        </div>
+                        <div class="control-group">
+                            <label>Corners</label>
+                            <select id="corners-square-style"><option value="square">Square</option><option value="dot">Dot</option></select>
+                        </div>
+                    </div>
+                    <div class="grid-cols-2">
+                        <div class="color-picker-wrapper"><input type="color" id="color-1" value="#000000"><label>Primary</label></div>
+                        <div class="color-picker-wrapper"><input type="color" id="bg-color" value="#FFFFFF"><label>Back</label></div>
+                    </div>
+                    <div class="control-group" style="margin-top:10px">
+                        <label>Secondary / Gradient</label>
+                        <div class="grid-cols-2">
+                            <select id="gradient-type"><option value="none">None</option><option value="linear">Linear</option></select>
+                            <input type="color" id="color-2" value="#000000">
+                        </div>
+                    </div>
+                    <input type="hidden" id="corners-dot-style" value="square">
+                </div>
+
+                <div id="logo-panel" class="hidden">
+                    <div class="control-group"><label>Upload</label><input type="file" id="logo-upload"></div>
+                    <div class="control-group"><label>Margin (px)</label><input type="number" id="image-margin" value="10"></div>
+                </div>
+            </div>
+            <div id="error-message"></div>
+        </section>
+
+        <section class="preview-area">
+            <div id="canvas-container"></div>
+            <label style="margin-top: 20px; text-align: center; width: 100%;">download formats</label>
+            <div class="btn-group" style="margin-top: 5px;">
+                <button id="download-png" class="btn">PNG</button>
+                <button id="download-jpeg" class="btn">JPEG</button>
+                <button id="download-svg" class="btn">SVG</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p style="color: black;">how did u even see this? anyways ,(base64 encoded btw ) Z28gYW5kIHNlZSB3aGF0IHRoZSBkZWZhdWx0IHFyIGxlYWRzIHUgdG8= </p>
+         built by <a href="https://github.com/ramnnn2006" target="_blank">thecrazyepiccat</a>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
